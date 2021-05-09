@@ -17,7 +17,7 @@ async def handle_report(request: Request):
 
     msg = f'<b> ERROR IN [{resp["project"].upper()}]!</b>\n\n' \
           f'<b>Message:</b> <code>{resp["message"]}</code>\n' \
-          f'<b>User data:</b> \n<code>{json.dumps(resp["event"]["user"], indent=2)}</code>'
+          f'<b>User data:</b> \n<code>{json.dumps(resp["event"]["user"], indent=2, ensure_ascii=False)}</code>'
 
     s = aiohttp.ClientSession()
     url = f'https://api.telegram.org/bot{os.getenv("TOKEN")}/sendmessage'
