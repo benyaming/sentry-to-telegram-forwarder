@@ -38,4 +38,4 @@ async def handle_report(request: Request):
     await s.close()
 
 
-uvicorn.run(app, port=8000)
+uvicorn.run(app, port=8000, host='127.0.0.1' if not os.getenv('DOCKER_MODE') else '0.0.0.0')
