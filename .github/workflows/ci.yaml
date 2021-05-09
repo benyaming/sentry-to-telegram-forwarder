@@ -1,0 +1,24 @@
+name: Sentry to telegram forwarder CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        run: docker build -t sentry-forwarder -f Dockerfile .
+      - name: Tags
+        run: |
+          docker tag sentry-forwarder ${{ secrets.DOCKER_USER }}/sentry-forwarder:${{ github.sha }}
+          docker tag sentry-forwarder ${{ secrets.DOCKER_USER }}/sentry-forwarder:latest
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/sentry-forwarder:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/sentry-forwarder:latest
